@@ -43,7 +43,7 @@ export default function SetAvatar() {
     async function fetchData() {
         const data = [];
         for(let i=0; i<4; i++){
-            const image = await axios.get(`${api}/${Math.round(Math.random()*1000)}?apikey=${process.env.AVATAR_API_KEY}`);
+            const image = await axios.get(`${api}/${Math.round(Math.random()*1000)}?apikey=${process.env.REACT_APP_AVATAR_API_KEY}`);
             
             const buffer = Buffer.from(image.data);
             data.push(buffer.toString('base64'));
