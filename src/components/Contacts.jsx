@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Logo from '../assets/logo.svg'
 import axios from 'axios'
 import { getSavedChatsRoute } from '../utils/APIRoutes'
+import Logout from './Logout'
 
 
 function Contacts({contacts, currentUser, changeChat}) {
@@ -42,6 +43,7 @@ function Contacts({contacts, currentUser, changeChat}) {
                 <div className="brand">
                     <img src={Logo} alt="logo" />
                     <h3>jetchat</h3>
+                    <button className='logout-btn'><Logout /></button>
                 </div>
                 <input className="username-inp" type="text" placeholder="Search username..." value={searchUser} onChange={e => setSearchUser(e.target.value)}/>
                 <div className="contacts">
@@ -93,6 +95,7 @@ const Container = styled.div`
     grid-template-rows: 10% 10% 65% 15%;
     overflow: hidden;
     background-color: #080420;
+    height: 100%;
     .brand {
         display: flex;
         align-items: center;
@@ -105,6 +108,17 @@ const Container = styled.div`
             color: white;
             text-transform: uppercase;
         }
+        .logout-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: #9a86f3;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
     }
     .username-inp {
         background-color: #ffffff39;
@@ -115,6 +129,7 @@ const Container = styled.div`
         font-size: 1.2rem;
         text-align: center;
         border-radius: 0.2rem;
+        margin-bottom: 0.5rem;
     }
     .contacts {
         display: flex;

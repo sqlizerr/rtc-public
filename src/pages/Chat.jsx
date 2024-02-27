@@ -15,6 +15,9 @@ function Chat() {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+
   useEffect(() => {
     if(!localStorage.getItem('chat-app-user')){
       navigate("/login");
@@ -23,6 +26,16 @@ function Chat() {
       setIsLoaded(true);
     }
   }, [])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 720px)');
+    setIsMobile(mediaQuery.matches);
+    const handleMediaQueryChange = (e) => {
+        setIsMobile(e.matches);
+    }
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    }, [isMobile]);
   
   useEffect(() => {
     if(currentUser){
@@ -50,21 +63,36 @@ function Chat() {
      setCurrentChat(chat);
   }
 
+  const back = () => {
+    setCurrentChat(undefined);
+  }
+
   return (
       <Container>
+      { isMobile ? (
+        <div className='container-mob'>
+        {(isLoaded && (currentChat === undefined)) ? (
+        <Contacts className="contacts" contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
+        ) : (
+          <ChatContainer className="chatcontainer" currentChat={currentChat} currentUser={currentUser} socket={socket} back={back}/>
+        )
+        }
+        </div>
+      ) : (
         <div className="container">
-          <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
+          <Contacts className="contacts" contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
           {
             (isLoaded && (currentChat === undefined)) ? (
-              <Welcome currentUser={currentUser}/>
+              <Welcome className="welcome" currentUser={currentUser}/>
             ) : (
               (isLoaded && (currentChat !== undefined) && currentUser !== undefined) && (
-              <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket}/>
+              <ChatContainer className="chatcontainer" currentChat={currentChat} currentUser={currentUser} socket={socket}/>
               )
             )
           }
         </div>
-        
+      )
+      }
       </Container>
   )
 }
@@ -87,7 +115,20 @@ const Container = styled.div`
     @media screen and (min-width: 720px) and (max-width: 1080px) {
       grid-template-columns: 35% 65%;
     }
+    @media screen and (max-width: 720px) {
+      
+    }
+  }
+  .container-mob {
+    height: 85vh;
+    width: 85vw;
+    background-color: #00000076;
+  }
+  .contacts {
+    height: 100%;
   }
 `;
+
+
 
 export default Chat;

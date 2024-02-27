@@ -2,15 +2,26 @@ import React, {useState, useEffect,useRef} from 'react'
 import styled from 'styled-components'
 import Logout from './Logout';
 import ChatInput from './ChatInput';
-import Messages from './Messages';
+
 import axios from 'axios';
 import { getAllMsgsRoute, sendMsgRoute } from '../utils/APIRoutes'
 import {v4 as uuidv4} from 'uuid';
 
-export default function ChatContainer({currentChat, currentUser, socket}) {
+export default function ChatContainer({currentChat, currentUser, socket, back}) {
     const [messages, setMessages] = useState([]);
     const [arrivedMsg, setArrivedMsg] = useState(null);
+    const [isMobile, setIsMobile] = useState(false)
     const scrollRef = useRef();
+
+    useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 720px)');
+    setIsMobile(mediaQuery.matches);
+    const handleMediaQueryChange = (e) => {
+        setIsMobile(e.matches);
+    }
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    }, [isMobile]);
     
     useEffect(() => {
         if(currentChat){
@@ -58,6 +69,8 @@ export default function ChatContainer({currentChat, currentUser, socket}) {
         scrollRef.current?.scrollIntoView({behavior: "smooth"});
     }, [messages])
 
+    
+
   return (
     <>
     {
@@ -65,6 +78,7 @@ export default function ChatContainer({currentChat, currentUser, socket}) {
         <Container>
         
             <div className="chatheader">
+            <button onClick={back} className='back-btn'><h3>BACK</h3></button>
                 <div className="userdetails">
                     <div className="avatar">
                         <img src={`data:image/svg+xml;base64,${currentChat.avatarImage}`} alt="avatar" />
@@ -73,9 +87,9 @@ export default function ChatContainer({currentChat, currentUser, socket}) {
                         <h3>{currentChat.username}</h3>
                     </div>
                 </div>
-                    <div className='logout'>
-                        <Logout />
-                    </div>
+                <div className='logout'>
+                    <Logout />
+                </div>
             </div>
             <div className="chat-msgs">
                 {
@@ -106,12 +120,24 @@ const Container = styled.div`
     grid-template-rows: 10% 78% 12%;
     gap: 0.1rem;
     overflow: hidden;
+    height: 100%;
     
     .chatheader {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 0 2rem;
+        .back-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: #9a86f3;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
         .userdetails {
             display:flex;
             align-items: center;
@@ -170,5 +196,8 @@ const Container = styled.div`
     }
     @media screen and (min-width: 720px) and (max-width: 1080px) {
       grid-template-rows: 15% 70% 15%;
+    }
+    @media screen and (max-width: 720px) {
+        
     }
 `;
