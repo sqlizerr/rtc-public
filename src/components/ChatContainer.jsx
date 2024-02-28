@@ -87,9 +87,7 @@ export default function ChatContainer({currentChat, currentUser, socket, back}) 
                         <h3>{currentChat.username}</h3>
                     </div>
                 </div>
-                <div className='logout'>
-                    <Logout />
-                </div>
+                
             </div>
             <div className="chat-msgs">
                 {
@@ -127,6 +125,7 @@ const Container = styled.div`
         justify-content: space-between;
         align-items: center;
         padding: 0 2rem;
+        width: 100%;
         .back-btn {
             display: flex;
             justify-content: center;
@@ -141,6 +140,7 @@ const Container = styled.div`
         .userdetails {
             display:flex;
             align-items: center;
+            justify-content: center;
             gap: 1rem;
             .avatar {
                 img {
