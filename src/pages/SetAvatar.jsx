@@ -141,6 +141,10 @@ const Container = styled.div`
         .selected {
             border: 0.3rem solid white;
         }
+        @media screen and (max-width: 720px){
+            display: grid;
+            grid-template-columns: 50% 50% ;
+        }
     }
     .btn-container {
         display: flex;
